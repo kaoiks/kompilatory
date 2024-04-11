@@ -6,14 +6,14 @@ generate:
 	java -jar $(ANTLR) -o antlrOutput PolskiJS.g4
 
 compile:
-	javac -cp "$(ANTLR);antlrOutput;." *.java -d bin
+	javac -cp "$(ANTLR):antlrOutput:." *.java -d bin
 
 test:
-	java -cp "$(ANTLR);bin" App test.pljs > test.ll
+	java -cp "$(ANTLR):bin" App test.pljs > test.ll
 	lli test.ll
 
 parsetree:
-	java -cp "$(ANTLR);bin" org.antlr.v4.runtime.misc.TestRig Demo prog -gui test.pljs
+	java -cp "$(ANTLR):bin" org.antlr.v4.runtime.misc.TestRig Demo prog -gui test.pljs
 
 clean:
 	rm test.ll

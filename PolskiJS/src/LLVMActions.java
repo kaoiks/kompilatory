@@ -1,48 +1,121 @@
-
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Stack;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
+
+enum VarType{ INT, REAL, UNKNOWN }
+
+class Value{ 
+	public String name;
+	public VarType type;
+	public Value( String name, VarType type ){
+		this.name = name;
+		this.type = type;
+	}
+}
 
 public class LLVMActions extends PolskiJSBaseListener {
-   @Override public void enterProg(PolskiJSParser.ProgContext ctx) 
-   {
-      System.out.println("Enter prog");
-   }
+    
+    HashMap<String, VarType> variables = new HashMap<String, VarType>();
+    Stack<Value> stack = new Stack<Value>();
 
-	@Override public void exitProg(PolskiJSParser.ProgContext ctx)
-   {
-      System.out.println("Exit prog");
-   }
+    @Override
+    public void exitAssign(PolskiJSParser.AssignContext ctx) { 
+       String ID = ctx.ID().getText();
+       Value v = stack.pop();
+       variables.put(ID, v.type);
+       if( v.type == VarType.INT ){
+         LLVMGenerator.declare_i32(ID);
+         LLVMGenerator.assign_i32(ID, v.name);
+       } 
+       if( v.type == VarType.REAL ){
+         LLVMGenerator.declare_double(ID);
+         LLVMGenerator.assign_double(ID, v.name);
+       } 
+    }
 
-	@Override public void enterStatement(PolskiJSParser.StatementContext ctx) 
-   { 
-      System.out.println("Enter statement");
-   }
+    @Override 
+    public void exitProg(PolskiJSParser.ProgContext ctx) { 
+       System.out.println( LLVMGenerator.generate() );
+    }
 
-	@Override public void exitStatement(PolskiJSParser.StatementContext ctx) 
-   { 
-      System.out.println("Exit statement");
-   }
+    @Override 
+    public void exitInt(PolskiJSParser.IntContext ctx) { 
+         stack.push( new Value(ctx.INT().getText(), VarType.INT) );       
+    } 
 
-	@Override public void enterEveryRule(ParserRuleContext ctx) 
-   { 
-      System.out.println("Enter every rule");
-   }
+    @Override 
+    public void exitReal(PolskiJSParser.RealContext ctx) { 
+         stack.push( new Value(ctx.REAL().getText(), VarType.REAL) );       
+    } 
 
-	@Override public void exitEveryRule(ParserRuleContext ctx) 
-   { 
-      System.out.println("Exit every rule");
-   }
+    @Override 
+    public void exitAdd(PolskiJSParser.AddContext ctx) { 
+       Value v1 = stack.pop();
+       Value v2 = stack.pop();
+       if( v1.type == v2.type ) {
+	  if( v1.type == VarType.INT ){
+             LLVMGenerator.add_i32(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+          }
+	  if( v1.type == VarType.REAL ){
+             LLVMGenerator.add_double(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+         }
+       } else {
+          error(ctx.getStart().getLine(), "Błąd typów w dodawaniu");
+       }
+    }
 
-	@Override public void visitTerminal(TerminalNode node) 
-   { 
-      System.out.println("Visit terminal");
-   }
+    @Override 
+    public void exitMult(PolskiJSParser.MultContext ctx) { 
+       Value v1 = stack.pop();
+       Value v2 = stack.pop();
+       if( v1.type == v2.type ) {
+	  if( v1.type == VarType.INT ){
+             LLVMGenerator.mult_i32(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+          }
+	  if( v1.type == VarType.REAL ){
+             LLVMGenerator.mult_double(v1.name, v2.name); 
+             stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+         }
+       } else {
+          error(ctx.getStart().getLine(), "Błąd typów w mnożeniu");
+       }
+    }
 
-	@Override public void visitErrorNode(ErrorNode node) 
-   {
-      System.out.println("Visit error node");
-   }
+    @Override 
+    public void exitToint(PolskiJSParser.TointContext ctx) { 
+       Value v = stack.pop();
+       LLVMGenerator.fptosi( v.name );
+       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+    }
+
+    @Override 
+    public void exitToreal(PolskiJSParser.TorealContext ctx) { 
+       Value v = stack.pop();
+       LLVMGenerator.sitofp( v.name );
+       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+    }
+
+    @Override
+    public void exitWrite(PolskiJSParser.WriteContext ctx) {
+       String ID = ctx.ID().getText();
+       VarType type = variables.get(ID);
+       if( type != null ) {
+          if( type == VarType.INT ){
+            LLVMGenerator.printf_i32( ID );
+          }
+          if( type == VarType.REAL ){
+            LLVMGenerator.printf_double( ID );
+          }
+       } else {
+          error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);
+       }
+    } 
+
+   void error(int line, String msg){
+       System.err.println("Błąd w linii: "+line+", "+msg);
+       System.exit(1);
+   } 
+       
 }

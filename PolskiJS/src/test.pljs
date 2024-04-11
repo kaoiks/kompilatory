@@ -1,2 +1,5 @@
-a=1
-b=2
+xd = 2 * 3;
+wyświetl xd;
+
+chuj = 3.0 * 3.5;
+wyświetl benc;
