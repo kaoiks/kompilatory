@@ -1,5 +1,11 @@
-xd = 2 * 3;
-wyświetl xd;
+a = 2 * 3;
+wyświetl a;
 
-chuj = 3.0 * 3.5;
-wyświetl benc;
+b = 3.0 * 3.5;
+wyświetl b;
+
+c = 1.5;
+wczytaj c;
+
+wyświetl c;
+

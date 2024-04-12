@@ -98,6 +98,25 @@ public class LLVMActions extends PolskiJSBaseListener {
     }
 
     @Override
+    public void exitRead(PolskiJSParser.ReadContext ctx) {
+       String ID = ctx.ID().getText();
+       VarType type = variables.get(ID);
+       if( type == null ) {
+         error(ctx.getStart().getLine(), "Nieznana zmienna: " + ID);
+         return;
+      } 
+
+       if (type == VarType.INT) {
+
+          LLVMGenerator.scanf(ID);
+       } else if (type == VarType.REAL) {
+          LLVMGenerator.scanf_double(ID);
+       } else {
+          error(ctx.getStart().getLine(), "Nieprawidłowy typ zmiennej: " + ID);
+       }
+    } 
+
+    @Override
     public void exitWrite(PolskiJSParser.WriteContext ctx) {
        String ID = ctx.ID().getText();
        VarType type = variables.get(ID);
@@ -111,7 +130,7 @@ public class LLVMActions extends PolskiJSBaseListener {
        } else {
           error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);
        }
-    } 
+    }
 
    void error(int line, String msg){
        System.err.println("Błąd w linii: "+line+", "+msg);

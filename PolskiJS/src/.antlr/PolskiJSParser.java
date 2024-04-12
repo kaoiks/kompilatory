@@ -1,4 +1,4 @@
-// Generated from c:/studia_pw/kompilatory/PolskiJS/src/PolskiJS.g4 by ANTLR 4.13.1
+// Generated from /Users/dev/Documents/pw_kompilatory/kompilatory/PolskiJS/src/PolskiJS.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -16,8 +16,8 @@ public class PolskiJSParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__0=1, T__1=2, T__2=3, T__3=4, PRINT=5, TOINT=6, TOREAL=7, ID=8, INT=9, 
-		REAL=10, ADD=11, MULT=12, NEWLINE=13, WS=14;
+		T__0=1, T__1=2, T__2=3, T__3=4, PRINT=5, READ=6, TOINT=7, TOREAL=8, ID=9, 
+		INT=10, REAL=11, ADD=12, MULT=13, NEWLINE=14, WS=15;
 	public static final int
 		RULE_prog = 0, RULE_stat = 1, RULE_expr0 = 2, RULE_expr1 = 3, RULE_expr2 = 4;
 	private static String[] makeRuleNames() {
@@ -29,15 +29,15 @@ public class PolskiJSParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'='", "';'", "'('", "')'", "'wy\\u015Bwietl'", "'(int)'", "'(real)'", 
-			null, null, null, "'+'", "'*'"
+			null, "'='", "';'", "'('", "')'", "'wy\\u015Bwietl'", "'wczytaj'", "'(int)'", 
+			"'(real)'", null, null, null, "'+'", "'*'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, null, null, null, null, "PRINT", "TOINT", "TOREAL", "ID", "INT", 
-			"REAL", "ADD", "MULT", "NEWLINE", "WS"
+			null, null, null, null, null, "PRINT", "READ", "TOINT", "TOREAL", "ID", 
+			"INT", "REAL", "ADD", "MULT", "NEWLINE", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -119,13 +119,13 @@ public class PolskiJSParser extends Parser {
 			setState(16);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 8480L) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 16992L) != 0)) {
 				{
 				{
 				setState(11);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if (_la==PRINT || _la==ID) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 608L) != 0)) {
 					{
 					setState(10);
 					stat();
@@ -166,6 +166,12 @@ public class PolskiJSParser extends Parser {
 		}
 	}
 	@SuppressWarnings("CheckReturnValue")
+	public static class ReadContext extends StatContext {
+		public TerminalNode READ() { return getToken(PolskiJSParser.READ, 0); }
+		public TerminalNode ID() { return getToken(PolskiJSParser.ID, 0); }
+		public ReadContext(StatContext ctx) { copyFrom(ctx); }
+	}
+	@SuppressWarnings("CheckReturnValue")
 	public static class WriteContext extends StatContext {
 		public TerminalNode PRINT() { return getToken(PolskiJSParser.PRINT, 0); }
 		public TerminalNode ID() { return getToken(PolskiJSParser.ID, 0); }
@@ -184,7 +190,7 @@ public class PolskiJSParser extends Parser {
 		StatContext _localctx = new StatContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_stat);
 		try {
-			setState(27);
+			setState(30);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case ID:
@@ -210,6 +216,18 @@ public class PolskiJSParser extends Parser {
 				setState(25);
 				match(ID);
 				setState(26);
+				match(T__1);
+				}
+				break;
+			case READ:
+				_localctx = new ReadContext(_localctx);
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(27);
+				match(READ);
+				setState(28);
+				match(ID);
+				setState(29);
 				match(T__1);
 				}
 				break;
@@ -263,14 +281,14 @@ public class PolskiJSParser extends Parser {
 		Expr0Context _localctx = new Expr0Context(_ctx, getState());
 		enterRule(_localctx, 4, RULE_expr0);
 		try {
-			setState(34);
+			setState(37);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				_localctx = new Single0Context(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(29);
+				setState(32);
 				expr1();
 				}
 				break;
@@ -278,11 +296,11 @@ public class PolskiJSParser extends Parser {
 				_localctx = new AddContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(30);
+				setState(33);
 				expr1();
-				setState(31);
+				setState(34);
 				match(ADD);
-				setState(32);
+				setState(35);
 				expr1();
 				}
 				break;
@@ -334,14 +352,14 @@ public class PolskiJSParser extends Parser {
 		Expr1Context _localctx = new Expr1Context(_ctx, getState());
 		enterRule(_localctx, 6, RULE_expr1);
 		try {
-			setState(41);
+			setState(44);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				_localctx = new Single1Context(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(36);
+				setState(39);
 				expr2();
 				}
 				break;
@@ -349,11 +367,11 @@ public class PolskiJSParser extends Parser {
 				_localctx = new MultContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(37);
+				setState(40);
 				expr2();
-				setState(38);
+				setState(41);
 				match(MULT);
-				setState(39);
+				setState(42);
 				expr2();
 				}
 				break;
@@ -420,14 +438,14 @@ public class PolskiJSParser extends Parser {
 		Expr2Context _localctx = new Expr2Context(_ctx, getState());
 		enterRule(_localctx, 8, RULE_expr2);
 		try {
-			setState(53);
+			setState(56);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				_localctx = new IntContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(43);
+				setState(46);
 				match(INT);
 				}
 				break;
@@ -435,7 +453,7 @@ public class PolskiJSParser extends Parser {
 				_localctx = new RealContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(44);
+				setState(47);
 				match(REAL);
 				}
 				break;
@@ -443,9 +461,9 @@ public class PolskiJSParser extends Parser {
 				_localctx = new TointContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(45);
+				setState(48);
 				match(TOINT);
-				setState(46);
+				setState(49);
 				expr2();
 				}
 				break;
@@ -453,9 +471,9 @@ public class PolskiJSParser extends Parser {
 				_localctx = new TorealContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(47);
+				setState(50);
 				match(TOREAL);
-				setState(48);
+				setState(51);
 				expr2();
 				}
 				break;
@@ -463,11 +481,11 @@ public class PolskiJSParser extends Parser {
 				_localctx = new ParContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(49);
+				setState(52);
 				match(T__2);
-				setState(50);
+				setState(53);
 				expr0();
-				setState(51);
+				setState(54);
 				match(T__3);
 				}
 				break;
@@ -487,42 +505,44 @@ public class PolskiJSParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u000e8\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
+		"\u0004\u0001\u000f;\u0002\u0000\u0007\u0000\u0002\u0001\u0007\u0001\u0002"+
 		"\u0002\u0007\u0002\u0002\u0003\u0007\u0003\u0002\u0004\u0007\u0004\u0001"+
 		"\u0000\u0003\u0000\f\b\u0000\u0001\u0000\u0005\u0000\u000f\b\u0000\n\u0000"+
 		"\f\u0000\u0012\t\u0000\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
-		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0003\u0001\u001c\b\u0001"+
-		"\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0001\u0002\u0003\u0002"+
-		"#\b\u0002\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003\u0001\u0003"+
-		"\u0003\u0003*\b\u0003\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
+		"\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001\u0001"+
+		"\u0001\u0001\u0003\u0001\u001f\b\u0001\u0001\u0002\u0001\u0002\u0001\u0002"+
+		"\u0001\u0002\u0001\u0002\u0003\u0002&\b\u0002\u0001\u0003\u0001\u0003"+
+		"\u0001\u0003\u0001\u0003\u0001\u0003\u0003\u0003-\b\u0003\u0001\u0004"+
 		"\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004\u0001\u0004"+
-		"\u0003\u00046\b\u0004\u0001\u0004\u0000\u0000\u0005\u0000\u0002\u0004"+
-		"\u0006\b\u0000\u0000;\u0000\u0010\u0001\u0000\u0000\u0000\u0002\u001b"+
-		"\u0001\u0000\u0000\u0000\u0004\"\u0001\u0000\u0000\u0000\u0006)\u0001"+
-		"\u0000\u0000\u0000\b5\u0001\u0000\u0000\u0000\n\f\u0003\u0002\u0001\u0000"+
-		"\u000b\n\u0001\u0000\u0000\u0000\u000b\f\u0001\u0000\u0000\u0000\f\r\u0001"+
-		"\u0000\u0000\u0000\r\u000f\u0005\r\u0000\u0000\u000e\u000b\u0001\u0000"+
-		"\u0000\u0000\u000f\u0012\u0001\u0000\u0000\u0000\u0010\u000e\u0001\u0000"+
-		"\u0000\u0000\u0010\u0011\u0001\u0000\u0000\u0000\u0011\u0001\u0001\u0000"+
-		"\u0000\u0000\u0012\u0010\u0001\u0000\u0000\u0000\u0013\u0014\u0005\b\u0000"+
-		"\u0000\u0014\u0015\u0005\u0001\u0000\u0000\u0015\u0016\u0003\u0004\u0002"+
-		"\u0000\u0016\u0017\u0005\u0002\u0000\u0000\u0017\u001c\u0001\u0000\u0000"+
-		"\u0000\u0018\u0019\u0005\u0005\u0000\u0000\u0019\u001a\u0005\b\u0000\u0000"+
-		"\u001a\u001c\u0005\u0002\u0000\u0000\u001b\u0013\u0001\u0000\u0000\u0000"+
-		"\u001b\u0018\u0001\u0000\u0000\u0000\u001c\u0003\u0001\u0000\u0000\u0000"+
-		"\u001d#\u0003\u0006\u0003\u0000\u001e\u001f\u0003\u0006\u0003\u0000\u001f"+
-		" \u0005\u000b\u0000\u0000 !\u0003\u0006\u0003\u0000!#\u0001\u0000\u0000"+
-		"\u0000\"\u001d\u0001\u0000\u0000\u0000\"\u001e\u0001\u0000\u0000\u0000"+
-		"#\u0005\u0001\u0000\u0000\u0000$*\u0003\b\u0004\u0000%&\u0003\b\u0004"+
-		"\u0000&\'\u0005\f\u0000\u0000\'(\u0003\b\u0004\u0000(*\u0001\u0000\u0000"+
-		"\u0000)$\u0001\u0000\u0000\u0000)%\u0001\u0000\u0000\u0000*\u0007\u0001"+
-		"\u0000\u0000\u0000+6\u0005\t\u0000\u0000,6\u0005\n\u0000\u0000-.\u0005"+
-		"\u0006\u0000\u0000.6\u0003\b\u0004\u0000/0\u0005\u0007\u0000\u000006\u0003"+
-		"\b\u0004\u000012\u0005\u0003\u0000\u000023\u0003\u0004\u0002\u000034\u0005"+
-		"\u0004\u0000\u000046\u0001\u0000\u0000\u00005+\u0001\u0000\u0000\u0000"+
-		"5,\u0001\u0000\u0000\u00005-\u0001\u0000\u0000\u00005/\u0001\u0000\u0000"+
-		"\u000051\u0001\u0000\u0000\u00006\t\u0001\u0000\u0000\u0000\u0006\u000b"+
-		"\u0010\u001b\")5";
+		"\u0001\u0004\u0001\u0004\u0001\u0004\u0003\u00049\b\u0004\u0001\u0004"+
+		"\u0000\u0000\u0005\u0000\u0002\u0004\u0006\b\u0000\u0000?\u0000\u0010"+
+		"\u0001\u0000\u0000\u0000\u0002\u001e\u0001\u0000\u0000\u0000\u0004%\u0001"+
+		"\u0000\u0000\u0000\u0006,\u0001\u0000\u0000\u0000\b8\u0001\u0000\u0000"+
+		"\u0000\n\f\u0003\u0002\u0001\u0000\u000b\n\u0001\u0000\u0000\u0000\u000b"+
+		"\f\u0001\u0000\u0000\u0000\f\r\u0001\u0000\u0000\u0000\r\u000f\u0005\u000e"+
+		"\u0000\u0000\u000e\u000b\u0001\u0000\u0000\u0000\u000f\u0012\u0001\u0000"+
+		"\u0000\u0000\u0010\u000e\u0001\u0000\u0000\u0000\u0010\u0011\u0001\u0000"+
+		"\u0000\u0000\u0011\u0001\u0001\u0000\u0000\u0000\u0012\u0010\u0001\u0000"+
+		"\u0000\u0000\u0013\u0014\u0005\t\u0000\u0000\u0014\u0015\u0005\u0001\u0000"+
+		"\u0000\u0015\u0016\u0003\u0004\u0002\u0000\u0016\u0017\u0005\u0002\u0000"+
+		"\u0000\u0017\u001f\u0001\u0000\u0000\u0000\u0018\u0019\u0005\u0005\u0000"+
+		"\u0000\u0019\u001a\u0005\t\u0000\u0000\u001a\u001f\u0005\u0002\u0000\u0000"+
+		"\u001b\u001c\u0005\u0006\u0000\u0000\u001c\u001d\u0005\t\u0000\u0000\u001d"+
+		"\u001f\u0005\u0002\u0000\u0000\u001e\u0013\u0001\u0000\u0000\u0000\u001e"+
+		"\u0018\u0001\u0000\u0000\u0000\u001e\u001b\u0001\u0000\u0000\u0000\u001f"+
+		"\u0003\u0001\u0000\u0000\u0000 &\u0003\u0006\u0003\u0000!\"\u0003\u0006"+
+		"\u0003\u0000\"#\u0005\f\u0000\u0000#$\u0003\u0006\u0003\u0000$&\u0001"+
+		"\u0000\u0000\u0000% \u0001\u0000\u0000\u0000%!\u0001\u0000\u0000\u0000"+
+		"&\u0005\u0001\u0000\u0000\u0000\'-\u0003\b\u0004\u0000()\u0003\b\u0004"+
+		"\u0000)*\u0005\r\u0000\u0000*+\u0003\b\u0004\u0000+-\u0001\u0000\u0000"+
+		"\u0000,\'\u0001\u0000\u0000\u0000,(\u0001\u0000\u0000\u0000-\u0007\u0001"+
+		"\u0000\u0000\u0000.9\u0005\n\u0000\u0000/9\u0005\u000b\u0000\u000001\u0005"+
+		"\u0007\u0000\u000019\u0003\b\u0004\u000023\u0005\b\u0000\u000039\u0003"+
+		"\b\u0004\u000045\u0005\u0003\u0000\u000056\u0003\u0004\u0002\u000067\u0005"+
+		"\u0004\u0000\u000079\u0001\u0000\u0000\u00008.\u0001\u0000\u0000\u0000"+
+		"8/\u0001\u0000\u0000\u000080\u0001\u0000\u0000\u000082\u0001\u0000\u0000"+
+		"\u000084\u0001\u0000\u0000\u00009\t\u0001\u0000\u0000\u0000\u0006\u000b"+
+		"\u0010\u001e%,8";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

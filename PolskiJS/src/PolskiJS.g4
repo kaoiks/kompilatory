@@ -5,6 +5,7 @@ prog: ( stat? NEWLINE )*
 
 stat:	 ID '=' expr0 ';'		#assign
     | PRINT ID ';'  		#write
+    | READ ID ';' 		#read
     ;
 
 expr0:  expr1			#single0
@@ -24,7 +25,9 @@ expr2:   INT			#int
 
 PRINT:	'wyświetl' 
     ;
-
+READ: 'wczytaj'
+    ;
+    
 TOINT: '(int)'
     ;
 

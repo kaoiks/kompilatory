@@ -41,6 +41,18 @@ public interface PolskiJSListener extends ParseTreeListener {
 	 */
 	void exitWrite(PolskiJSParser.WriteContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code read}
+	 * labeled alternative in {@link PolskiJSParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void enterRead(PolskiJSParser.ReadContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code read}
+	 * labeled alternative in {@link PolskiJSParser#stat}.
+	 * @param ctx the parse tree
+	 */
+	void exitRead(PolskiJSParser.ReadContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code single0}
 	 * labeled alternative in {@link PolskiJSParser#expr0}.
 	 * @param ctx the parse tree

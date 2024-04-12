@@ -52,6 +52,18 @@ public class PolskiJSBaseListener implements PolskiJSListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRead(PolskiJSParser.ReadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRead(PolskiJSParser.ReadContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterSingle0(PolskiJSParser.Single0Context ctx) { }
 	/**
 	 * {@inheritDoc}

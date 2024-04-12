@@ -10,6 +10,16 @@ class LLVMGenerator{
        main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %"+(reg-1)+")\n";
        reg++;
     }
+
+    static void scanf(String id){
+      main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strs, i32 0, i32 0), i32* %"+id+")\n";
+      reg++;      
+   }
+
+   static void scanf_double(String id){
+         main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double* %"+id+")\n";
+         reg++;      
+   }
  
     static void printf_double(String id){
        main_text += "%"+reg+" = load double, double* %"+id+"\n";
@@ -79,7 +89,7 @@ class LLVMGenerator{
     static String generate(){
        String text = "";
        text += "declare i32 @printf(i8*, ...)\n";
-       text += "declare i32 @__isoc99_scanf(i8*, ...)\n";
+       text += "declare i32 @scanf(i8*, ...)\n";
        text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n";
        text += "@strpd = constant [4 x i8] c\"%f\\0A\\00\"\n";
        text += "@strs = constant [3 x i8] c\"%d\\00\"\n";
