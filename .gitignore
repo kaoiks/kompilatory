@@ -1,5 +1,5 @@
 /.metadata/
-PolskiJS/src/antlrOutput
+**/antlrOutput
 PolskiJS/bin
 PolskiJS/src/bin
 *.ll
