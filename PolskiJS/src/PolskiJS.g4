@@ -19,7 +19,6 @@ arithmetic_operation:  value        #singleValue
 
 value: INT      #int
     | REAL      #real 
-    | STRING    #string
 ;	
 
 PRINT: 'wyświetl' 
@@ -34,9 +33,6 @@ INT: '0'..'9'+
     ;
 
 REAL: INT'.'INT
-    ;
-
-STRING :  '"' ( ~('\\'|'"') )* '"'
     ;
 
 ADD: '+'
