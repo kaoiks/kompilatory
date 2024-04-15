@@ -1,30 +1,30 @@
 class LLVMGenerator{
    
-    static String header_text = "";
-    static String main_text = "";
-    static int reg = 1;
+   static String header_text = "";
+   static String main_text = "";
+   static int reg = 1;
  
-    static void printf_i32(String id){
+   static void printf_i32(String id){
        main_text += "%"+reg+" = load i32, i32* %"+id+"\n";
        reg++;
-       main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpi, i32 0, i32 0), i32 %"+(reg-1)+")\n";
+       main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strintprint, i32 0, i32 0), i32 %"+(reg-1)+")\n";
        reg++;
-    }
+   }
 
-    static void scanf(String id){
-      main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strs, i32 0, i32 0), i32* %"+id+")\n";
+   static void scanf_i32(String id){
+      main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @strintscan, i32 0, i32 0), i32* %"+id+")\n";
       reg++;      
    }
 
    static void scanf_double(String id){
-         main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double* %"+id+")\n";
+         main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @strdoublescan, i32 0, i32 0), double* %"+id+")\n";
          reg++;      
    }
  
-    static void printf_double(String id){
+   static void printf_double(String id){
        main_text += "%"+reg+" = load double, double* %"+id+"\n";
        reg++;
-       main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @strpd, i32 0, i32 0), double %"+(reg-1)+")\n";
+       main_text += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([5 x i8], [5 x i8]* @strdoubleprint, i32 0, i32 0), double %"+(reg-1)+")\n";
        reg++;
     }
  
@@ -90,9 +90,10 @@ class LLVMGenerator{
        String text = "";
        text += "declare i32 @printf(i8*, ...)\n";
        text += "declare i32 @scanf(i8*, ...)\n";
-       text += "@strpi = constant [4 x i8] c\"%d\\0A\\00\"\n";
-       text += "@strpd = constant [4 x i8] c\"%f\\0A\\00\"\n";
-       text += "@strs = constant [3 x i8] c\"%d\\00\"\n";
+       text += "@strintprint = constant [4 x i8] c\"%d\\0A\\00\"\n";
+       text += "@strintscan = constant [3 x i8] c\"%d\\00\"\n";
+       text += "@strdoubleprint = constant [5 x i8] c\"%lf\\0A\\00\"\n";
+       text += "@strdoublescan = constant [4 x i8] c\"%lf\\00\"\n";
        text += header_text;
        text += "define i32 @main() nounwind{\n";
        text += main_text;

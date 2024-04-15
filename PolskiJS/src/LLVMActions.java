@@ -108,7 +108,7 @@ public class LLVMActions extends PolskiJSBaseListener {
 
        if (type == VarType.INT) {
 
-          LLVMGenerator.scanf(ID);
+          LLVMGenerator.scanf_i32(ID);
        } else if (type == VarType.REAL) {
           LLVMGenerator.scanf_double(ID);
        } else {
