@@ -1,6 +1,7 @@
 /.metadata/
-**/antrlOutput
-**/bin
+PolskiJS/src/antlrOutput
+PolskiJS/bin
+PolskiJS/src/bin
 *.ll
-**/.vscode
-**/.antlr
+PolskiJS/.vscode
+PolskiJS/src/.antlr
