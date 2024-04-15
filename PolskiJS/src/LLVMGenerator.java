@@ -44,7 +44,6 @@ class LLVMGenerator{
        main_text += "store double "+value+", double* %"+id+"\n";
     }
  
- 
     static void load_i32(String id){
        main_text += "%"+reg+" = load i32, i32* %"+id+"\n";
        reg++;

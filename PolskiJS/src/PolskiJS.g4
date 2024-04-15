@@ -3,35 +3,28 @@ grammar PolskiJS;
 prog: ( stat? NEWLINE )* 
 ;
 
-stat:	 ID '=' expr0 ';'		#assign
-    | PRINT ID ';'  		#write
-    | READ ID ';' 		#read
+stat: ID '=' assignment_value ';' #assign
+    | PRINT ID ';'  		      #write     
+    | READ ID ';' 		          #read        
     ;
 
-expr0:  expr1			#single0
-      | expr1 ADD expr1	#add 
+assignment_value:  value
+      | arithmetic_operation
 ;
 
-expr1:  expr2			#single1
-      | expr2 MULT expr2	#mult 
+arithmetic_operation:  value        #singleValue
+    | value ADD value               #add
+    | value MULT value              #mult
 ;
 
-expr2:   INT			#int
-       | REAL			#real
-       | TOINT expr2		#toint
-       | TOREAL expr2		#toreal
-       | '(' expr0 ')'		#par
+value: INT      #int
+    | REAL      #real 
+    | STRING    #string
 ;	
 
-PRINT:	'wyświetl' 
+PRINT: 'wyświetl' 
     ;
 READ: 'wczytaj'
-    ;
-    
-TOINT: '(int)'
-    ;
-
-TOREAL: '(real)'
     ;
 
 ID:   ('a'..'z'|'A'..'Z')+
@@ -43,6 +36,8 @@ INT: '0'..'9'+
 REAL: INT'.'INT
     ;
 
+STRING :  '"' ( ~('\\'|'"') )* '"'
+    ;
 
 ADD: '+'
     ;
@@ -50,8 +45,8 @@ ADD: '+'
 MULT: '*'
     ;
 
-NEWLINE:	'\r'? '\n'
+NEWLINE: '\r'? '\n'
     ;
 
-WS:   (' '|'\t')+ { skip(); }
+WS: (' '|'\t')+ { skip(); }
     ;

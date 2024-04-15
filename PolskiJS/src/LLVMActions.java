@@ -83,20 +83,6 @@ public class LLVMActions extends PolskiJSBaseListener {
        }
     }
 
-    @Override 
-    public void exitToint(PolskiJSParser.TointContext ctx) { 
-       Value v = stack.pop();
-       LLVMGenerator.fptosi( v.name );
-       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
-    }
-
-    @Override 
-    public void exitToreal(PolskiJSParser.TorealContext ctx) { 
-       Value v = stack.pop();
-       LLVMGenerator.sitofp( v.name );
-       stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
-    }
-
     @Override
     public void exitRead(PolskiJSParser.ReadContext ctx) {
        String ID = ctx.ID().getText();
