@@ -1,12 +1,21 @@
 grammar PolskiJS;
 
-prog: ( stat? NEWLINE )* 
+prog: block
 ;
 
-stat: ID '=' assignment_value ';' #assign
-    | PRINT ID ';'  		      #write     
-    | READ ID ';' 		          #read        
+block: stat*
+;
+
+stat: ID '=' assignment_value ';'           #assign
+    | PRINT ID ';'  		                #write     
+    | READ ID ';' 		                    #read   
+    | IF compare_equality '{' ifblock '}'  #if
     ;
+
+ifblock: block;
+
+compare_equality: ID '==' INT    #isEqual
+;
 
 assignment_value:  value
       | arithmetic_operation
@@ -41,8 +50,7 @@ ADD: '+'
 MULT: '*'
     ;
 
-NEWLINE: '\r'? '\n'
-    ;
+IF:	'jeżeli'
+;
 
-WS: (' '|'\t')+ { skip(); }
-    ;
+WS : [ \t\r\n]+ -> skip;

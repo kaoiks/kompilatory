@@ -1,11 +1,14 @@
-a = 2 * 3;
-wyświetl a;
+a = 0;
 
-b = 1.5 * 2.0;
-wyświetl b;
+wczytaj a;
 
-c = 1.1;
-wczytaj c;
+jeżeli a == 6 
+{
+    wyświetl a;
+    b = 1.0;
+    c = 2.0 * 1.0;
+    wyświetl c;
+}
 
-wyświetl c;
-
+d = 1 + 6;
+wyświetl d;

@@ -1,8 +1,13 @@
+import java.util.Stack;
+
 class LLVMGenerator{
    
    static String header_text = "";
    static String main_text = "";
    static int reg = 1;
+   static int br = 0;
+
+   static Stack<Integer> brstack = new Stack<Integer>();
  
    static void scanf_i32(String id){
       main_text += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @int_scan_format, i32 0, i32 0), i32* %"+id+")\n";
@@ -73,16 +78,26 @@ class LLVMGenerator{
       main_text += "%"+reg+" = fmul double "+val1+", "+val2+"\n";
       reg++;
     }
- 
-    static void sitofp(String id){
-      main_text += "%"+reg+" = sitofp i32 "+id+" to double\n";
-      reg++;
-    }
- 
-    static void fptosi(String id){
-      main_text += "%"+reg+" = fptosi double "+id+" to i32\n";
-      reg++;
-    }
+
+    static void icmp(String id, String value){
+     main_text += "%"+reg+" = load i32, i32* %"+id+"\n";
+     reg++;
+     main_text += "%"+reg+" = icmp eq i32 %"+(reg-1)+", "+value+"\n";
+     reg++;
+   }
+
+   static void ifstart(){
+     br++;
+     main_text += "br i1 %"+(reg-1)+", label %true"+br+", label %false"+br+"\n";
+     main_text += "true"+br+":\n";
+     brstack.push(br);
+   }
+
+   static void ifend(){
+     int b = brstack.pop();
+     main_text += "br label %false"+b+"\n";
+     main_text += "false"+b+":\n";
+   }
  
     static String generate(){
       String text = "";

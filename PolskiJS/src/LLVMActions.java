@@ -118,6 +118,27 @@ public class LLVMActions extends PolskiJSBaseListener {
        }
     }
 
+   @Override
+   public void enterIfblock(PolskiJSParser.IfblockContext ctx) {
+      LLVMGenerator.ifstart();
+   }
+
+   @Override
+   public void exitIfblock(PolskiJSParser.IfblockContext ctx) {
+      LLVMGenerator.ifend();
+   }
+   
+   @Override
+   public void exitIsEqual(PolskiJSParser.IsEqualContext ctx) { 
+      String ID = ctx.ID().getText();
+      String INT = ctx.INT().getText();
+      if( variables.get(ID) != null ) {
+         LLVMGenerator.icmp( ID, INT );
+      } else {
+         ctx.getStart().getLine();
+         error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);      }
+   }
+
    void error(int line, String msg){
        System.err.println("Błąd w linii: "+line+", "+msg);
        System.exit(1);
