@@ -16,6 +16,7 @@ public class LLVMActions extends PolskiJSBaseListener {
     
     HashMap<String, VarType> variables = new HashMap<String, VarType>();
     Stack<Value> stack = new Stack<Value>();
+    String remainingLoops;
 
     @Override
     public void exitAssign(PolskiJSParser.AssignContext ctx) { 
@@ -136,7 +137,36 @@ public class LLVMActions extends PolskiJSBaseListener {
          LLVMGenerator.icmp( ID, INT );
       } else {
          ctx.getStart().getLine();
-         error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);      }
+         error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);      
+      }
+   }
+
+   @Override
+   public void exitLoopscount(PolskiJSParser.LoopscountContext ctx) { 
+      LLVMGenerator.loopstart(remainingLoops);
+   }
+
+   @Override 
+   public void exitLoopscountvalue(PolskiJSParser.LoopscountvalueContext ctx) { 
+      if( ctx.ID() != null ){
+         String ID = ctx.ID().getText();     
+         if( variables.get(ID) != null) {
+            LLVMGenerator.load_i32(ID);
+            remainingLoops = "%"+(LLVMGenerator.reg-1); 
+         } else {
+            error(ctx.getStart().getLine(), "Nieznana zmienna: "+ID);     
+         }
+      }
+      if( ctx.INT() != null ){
+         remainingLoops = ctx.INT().getText();     
+      } 
+   }
+
+   @Override
+   public void exitBlock(PolskiJSParser.BlockContext ctx) {
+      if( ctx.getParent() instanceof PolskiJSParser.LoopContext ){
+         LLVMGenerator.loopend();
+      }
    }
 
    void error(int line, String msg){

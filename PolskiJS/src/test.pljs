@@ -11,4 +11,17 @@ jeżeli a == 6
 }
 
 d = 1 + 6;
-wyświetl d;
+
+x = 0;
+
+wczytaj x;
+
+powtórz x razy
+{
+    wyświetl d;
+
+    jeżeli x == 5
+    {
+        wyświetl x;
+    }
+}
