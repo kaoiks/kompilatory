@@ -25,3 +25,9 @@ powtórz x razy
         wyświetl x;
     }
 }
+
+f = 77;
+
+funkcja zrob {
+    wyświetl f;
+}

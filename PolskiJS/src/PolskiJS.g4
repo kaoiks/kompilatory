@@ -3,7 +3,7 @@ grammar PolskiJS;
 prog: block
 ;
 
-block: stat*
+block: (stat | function)*
 ;
 
 stat: ID '=' assignment_value ';'           #assign
@@ -11,7 +11,20 @@ stat: ID '=' assignment_value ';'           #assign
     | READ ID ';' 		                    #read   
     | IF compare_equality '{' ifblock '}'   #if
     | LOOP loopscount TIMES '{' block '}'   #loop
+    | ID '(' functionargumentvalue ')' ';'  #functionCall
     ;
+
+function: FUNCTION ID '(' functionargument ')' '{' functionblock '}'
+;
+
+functionargument: ID
+;
+
+functionargumentvalue: ID | value
+;
+
+functionblock: block
+;
 
 TIMES: 'razy'
 ;
@@ -66,6 +79,7 @@ IF:	'jeżeli'
 LOOP: 'powtórz'
 ;
 
-
+FUNCTION: 'funkcja'
+;
 
 WS : [ \t\r\n]+ -> skip;
