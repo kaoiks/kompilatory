@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.util.Stack;
 
 class LLVMGenerator{
@@ -176,6 +177,7 @@ class LLVMGenerator{
       text += "@double_print_format = constant [5 x i8] c\"%lf\\0A\\00\"\n";
       text += "@double_scan_format = constant [4 x i8] c\"%lf\\00\"\n";
       text += "@str_print_format = constant [3 x i8] c\"%s\\00\"\n";
+      text += "@new_line = constant [2 x i8] c\"\\0A\\00\"\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
       text += main_text;
@@ -217,5 +219,17 @@ class LLVMGenerator{
     reg++;
   }
 
-
+    static void printf_string_literal(String str) {
+      byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
+      StringBuilder byteString = new StringBuilder();
+      for (byte b : bytes) {
+        byteString.append(String.format("\\%02X", b));
+      }
+      String strLabel = "@.str" + reg;
+      header_text += strLabel + " = private unnamed_addr constant [" + (bytes.length + 1) + " x i8] c\"" + byteString.toString() + "\\00\"\n";
+      buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([" + (bytes.length + 1) + " x i8], [" + (bytes.length + 1) + " x i8]* " + strLabel + ", i32 0, i32 0))\n";
+      reg++;
+      buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @new_line, i32 0, i32 0))\n";
+      reg++;
+    }
 }

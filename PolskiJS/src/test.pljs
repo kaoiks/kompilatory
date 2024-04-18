@@ -17,7 +17,7 @@ d = 1;
 wczytaj d;
 
 jeżeli d == 123 {
-    powtórz 10 razy {
+    powtórz 3 razy {
         wyświetl d;
     }
 }
@@ -26,7 +26,9 @@ e = 4.5 + 3.55;
 wyświetl e;
 
 
-f = 10 / 3;
+f = 10.0 / 3.0;
 wyświetl f;
 
 
+wyświetl "BARDZO ŁADNY TEKST";
+wyświetl "BARDZO ŁADNY TEKST 2";

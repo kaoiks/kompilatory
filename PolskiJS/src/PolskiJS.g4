@@ -83,8 +83,10 @@ ADD: '+'
 MULT: '*'
 ;
 
-STRING :  '"' ( ~('\\'|'"') )* '"'
-    ;
+STRING : '"' ( EscapeSequence | ~["\\] )* '"';
+fragment EscapeSequence : '\\' [btnfr"'\\] | UnicodeEscape ;
+fragment UnicodeEscape : '\\u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT ;
+fragment HEX_DIGIT : [0-9a-fA-F] ;
 
 
 DEDUCT: '-'

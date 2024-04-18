@@ -360,9 +360,12 @@ public class LLVMActions extends PolskiJSBaseListener {
 
    @Override
    public void exitWriteString(PolskiJSParser.WriteStringContext ctx) {
-      String text = ctx.STRING().getText();
-      // error(ctx.getStart().getLine(), "Nieznana zmienna: "+text);  
-      LLVMGenerator.printf_string(text);
+      String strLiteral = ctx.STRING().getText();
+      // Remove the surrounding quotes
+      String strValue = strLiteral.substring(1, strLiteral.length() - 1); 
+      // Convert escaped characters
+      String processedStr = strValue.replace("\\\"", "\"");
+      LLVMGenerator.printf_string_literal(processedStr);
    }
    
    public String assignVariable(String ID){
