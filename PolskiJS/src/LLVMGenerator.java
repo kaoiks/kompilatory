@@ -98,7 +98,7 @@ class LLVMGenerator{
     static void icmp(String id, String value){
      buffer += "%"+reg+" = load i32, i32* "+id+"\n";
      reg++;
-     buffer += "%"+reg+" = icmp eq i32 "+(reg-1)+", "+value+"\n";
+     buffer += "%"+reg+" = icmp eq i32 %"+(reg-1)+", "+value+"\n";
      reg++;
    }
 
@@ -150,11 +150,17 @@ class LLVMGenerator{
    }
 
    static void functionend(){
-      buffer += "ret i32 %"+(reg-1)+"\n"; 
+      // buffer += "ret i32 %"+(reg-1)+"\n"; 
+      buffer += "ret i32 0 \n";
       buffer += "}\n";
       header_text += buffer;
       buffer = "";
       reg = main_reg;
+   }
+
+   static void call(String id){
+      buffer += "%"+reg+" = call i32 @"+id+"()\n";
+      reg++;
    }
 
     static void close_main(){

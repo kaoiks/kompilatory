@@ -34,23 +34,23 @@ public class LLVMActions extends PolskiJSBaseListener {
 
    @Override
     public void exitFunctionblock(PolskiJSParser.FunctionblockContext ctx) {
-       if( localVariables.get(currentFunction) != null )
-       {
-         LLVMGenerator.assign_i32(assignVariable(currentFunction), "0");
-       }
-       LLVMGenerator.load_i32( "%" + currentFunction );
        LLVMGenerator.functionend();
        localVariables = new HashMap<String, VarType>();
        isGlobal = true;
     }
 
    @Override 
-   public void exitFunctionargument(PolskiJSParser.FunctionargumentContext ctx) {
+   public void enterFunction(PolskiJSParser.FunctionContext ctx) {
       String ID = ctx.ID().getText();
       functions.add(ID); 
       currentFunction = ID;
       LLVMGenerator.functionstart(ID);
    }
+
+   @Override
+   public void exitFunctionCall(PolskiJSParser.FunctionCallContext ctx) {
+      LLVMGenerator.call(ctx.ID().getText());
+   } 
 
     @Override
     public void exitAssign(PolskiJSParser.AssignContext ctx) { 
@@ -183,17 +183,30 @@ public class LLVMActions extends PolskiJSBaseListener {
     @Override
     public void exitWrite(PolskiJSParser.WriteContext ctx) {
       String ID = ctx.ID().getText();
-      VarType type = globalVariables.get(ID);
+      VarType type;
+      String varName;
+
+      if(isGlobal)
+      {
+         type = globalVariables.get(ID);
+         varName = "@" + ID;
+      }
+      else{
+         HashMap<String, VarType> allVariables = new HashMap<String, VarType>(localVariables);
+         allVariables.putAll(globalVariables);
+         type = allVariables.get(ID);
+         varName = localVariables.get(ID) != null ? "%" + ID : "@" + ID;
+      }
 
       if( type != null ) 
       {
          if( type == VarType.INT )
          {
-            LLVMGenerator.printf_i32( isGlobal ? "@" + ID : "%" + ID );
+            LLVMGenerator.printf_i32( varName );
          }
          if( type == VarType.REAL )
          {
-            LLVMGenerator.printf_double( isGlobal ? "@" + ID : "%" + ID );
+            LLVMGenerator.printf_double( varName );
          }
       } 
       else 

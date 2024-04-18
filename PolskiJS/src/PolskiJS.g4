@@ -11,10 +11,16 @@ stat: ID '=' assignment_value ';'           #assign
     | READ ID ';' 		                    #read   
     | IF compare_equality '{' ifblock '}'   #if
     | LOOP loopscount TIMES '{' block '}'   #loop
-    | ID '(' functionargumentvalue ')' ';'  #functionCall
+    | CALL ID '();'                         #functionCall
     ;
 
-function: FUNCTION ID '(' functionargument ')' '{' functionblock '}'
+CALL: 'wywołaj'
+;
+
+FUNCTION: 'funkcja'
+;
+
+function: FUNCTION ID '(' functionargument* ')' '{' functionblock '}'
 ;
 
 functionargument: ID
@@ -77,9 +83,6 @@ IF:	'jeżeli'
 ;
 
 LOOP: 'powtórz'
-;
-
-FUNCTION: 'funkcja'
 ;
 
 WS : [ \t\r\n]+ -> skip;

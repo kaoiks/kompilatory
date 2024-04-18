@@ -1,33 +1,24 @@
-a = 0;
+a = 77;
 
-wczytaj a;
-
-jeżeli a == 6 
-{
+funkcja zrob(x) {
     wyświetl a;
-    b = 1.0;
-    c = 2.0 * 1.0;
+    c = 1.5;
     wyświetl c;
 }
 
-d = 1 + 6;
+b = 2;
+wyświetl b;
 
-x = 0;
+wywołaj zrob();
+wywołaj zrob();
+wywołaj zrob();
 
-wczytaj x;
+d = 1;
 
-powtórz x razy
-{
-    wyświetl d;
+wczytaj d;
 
-    jeżeli x == 5
-    {
-        wyświetl x;
+jeżeli d == 5 {
+    powtórz 10 razy {
+        wyświetl d;
     }
-}
-
-f = 77;
-
-funkcja zrob {
-    wyświetl f;
 }
