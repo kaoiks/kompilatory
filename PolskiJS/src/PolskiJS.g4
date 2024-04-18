@@ -7,11 +7,12 @@ block: (stat | function)*
 ;
 
 stat: ID '=' assignment_value ';'           #assign
-    | PRINT ID ';'  		                #write     
+    | PRINT (ID) ';'  		                #write     
     | READ ID ';' 		                    #read   
     | IF compare_equality '{' ifblock '}'   #if
     | LOOP loopscount TIMES '{' block '}'   #loop
     | CALL ID '();'                         #functionCall
+    | PRINT STRING  ';'                      #writeString
     ;
 
 CALL: 'wywołaj'
@@ -43,7 +44,7 @@ loopscountvalue: ID | INT
 
 ifblock: block;
 
-compare_equality: ID '==' INT    #isEqual
+compare_equality: ID '==' INT #isEqual
 ;
 
 assignment_value:  value
@@ -53,6 +54,9 @@ assignment_value:  value
 arithmetic_operation:  value        #singleValue
     | value ADD value               #add
     | value MULT value              #mult
+    | value DEDUCT value            #deduct
+    | value DIV value               #div
+
 ;
 
 value: INT      #int
@@ -77,6 +81,16 @@ ADD: '+'
 ;
 
 MULT: '*'
+;
+
+STRING :  '"' ( ~('\\'|'"') )* '"'
+    ;
+
+
+DEDUCT: '-'
+;
+
+DIV: '/'
 ;
 
 IF:	'jeżeli'

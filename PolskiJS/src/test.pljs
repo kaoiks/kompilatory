@@ -1,6 +1,6 @@
 a = 77;
 
-funkcja zrob(x) {
+funkcja zrob() {
     wyświetl a;
     c = 1.5;
     wyświetl c;
@@ -9,16 +9,24 @@ funkcja zrob(x) {
 b = 2;
 wyświetl b;
 
-wywołaj zrob();
-wywołaj zrob();
+
 wywołaj zrob();
 
 d = 1;
 
 wczytaj d;
 
-jeżeli d == 5 {
+jeżeli d == 123 {
     powtórz 10 razy {
         wyświetl d;
     }
 }
+
+e = 4.5 + 3.55;
+wyświetl e;
+
+
+f = 10 / 3;
+wyświetl f;
+
+

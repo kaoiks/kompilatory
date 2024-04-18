@@ -147,7 +147,79 @@ public class LLVMActions extends PolskiJSBaseListener {
          error(ctx.getStart().getLine(), "Błąd typów w mnożeniu");
       }
     }
+    @Override
+    public void exitDeduct(PolskiJSParser.DeductContext ctx){
+      Value v1 = stack.pop();
+      Value v2 = stack.pop();
+      String v1Name = v1.name;
+      String v2Name = v2.name;
 
+      if(isGlobal)
+      {
+         v1Name = globalVariables.get(v1Name) == null ? v1Name : "@" + v1Name;
+         v2Name = globalVariables.get(v2Name) == null ? v2Name : "@" + v2Name;
+      }
+      else
+      {
+         v1Name = localVariables.get(v1Name) == null ? v1Name : "%" + v1Name;
+         v2Name = localVariables.get(v2Name) == null ? v2Name : "%" + v2Name;
+      }
+
+      if( v1.type == v2.type ) 
+      {
+         if( v1.type == VarType.INT )
+         {
+            LLVMGenerator.deduct_i32(v2Name, v1Name); 
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+         }
+         if( v1.type == VarType.REAL )
+         {
+            LLVMGenerator.deduct_double(v2Name, v1Name); 
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+         }
+      } 
+      else 
+      {
+         error(ctx.getStart().getLine(), "Błąd typów w odejmowaniu");
+      }
+    }
+
+    @Override
+    public void exitDiv(PolskiJSParser.DivContext ctx){
+      Value v1 = stack.pop();
+      Value v2 = stack.pop();
+      String v1Name = v1.name;
+      String v2Name = v2.name;
+
+      if(isGlobal)
+      {
+         v1Name = globalVariables.get(v1Name) == null ? v1Name : "@" + v1Name;
+         v2Name = globalVariables.get(v2Name) == null ? v2Name : "@" + v2Name;
+      }
+      else
+      {
+         v1Name = localVariables.get(v1Name) == null ? v1Name : "%" + v1Name;
+         v2Name = localVariables.get(v2Name) == null ? v2Name : "%" + v2Name;
+      }
+
+      if( v1.type == v2.type ) 
+      {
+         if( v1.type == VarType.INT )
+         {
+            LLVMGenerator.div_i32(v2Name, v1Name); 
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.INT) ); 
+         }
+         if( v1.type == VarType.REAL )
+         {
+            LLVMGenerator.div_double(v2Name, v1Name); 
+            stack.push( new Value("%"+(LLVMGenerator.reg-1), VarType.REAL) ); 
+         }
+      } 
+      else 
+      {
+         error(ctx.getStart().getLine(), "Błąd typów w dzieleniu");
+      }
+    }
     @Override
     public void exitRead(PolskiJSParser.ReadContext ctx) {
       String ID = ctx.ID().getText();
@@ -286,6 +358,13 @@ public class LLVMActions extends PolskiJSBaseListener {
       }
    }
 
+   @Override
+   public void exitWriteString(PolskiJSParser.WriteStringContext ctx) {
+      String text = ctx.STRING().getText();
+      // error(ctx.getStart().getLine(), "Nieznana zmienna: "+text);  
+      LLVMGenerator.printf_string(text);
+   }
+   
    public String assignVariable(String ID){
       String id;
       Value v = stack.pop();
@@ -313,6 +392,8 @@ public class LLVMActions extends PolskiJSBaseListener {
 
       return id;
    }
+
+   
 
    void error(int line, String msg){
        System.err.println("Błąd w linii: "+line+", "+msg);

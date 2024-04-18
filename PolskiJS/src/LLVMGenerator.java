@@ -167,7 +167,7 @@ class LLVMGenerator{
       main_text += buffer;
    }
  
-    static String generate(){
+    static String generate() {
       String text = "";
       text += "declare i32 @printf(i8*, ...)\n";
       text += "declare i32 @scanf(i8*, ...)\n";
@@ -175,11 +175,47 @@ class LLVMGenerator{
       text += "@int_scan_format = constant [3 x i8] c\"%d\\00\"\n";
       text += "@double_print_format = constant [5 x i8] c\"%lf\\0A\\00\"\n";
       text += "@double_scan_format = constant [4 x i8] c\"%lf\\00\"\n";
+      text += "@str_print_format = constant [3 x i8] c\"%s\\00\"\n";
       text += header_text;
       text += "define i32 @main() nounwind{\n";
       text += main_text;
       text += "ret i32 0 }\n";
       return text;
+    }
+
+   public static void deduct_i32(String v1Name, String v2Name) {
+    buffer += "%" + reg + " = sub i32 " + v1Name + ", " + v2Name + "\n";
+    reg++;
    }
- 
- }
+    public static void deduct_double(String v1Name, String v2Name) {
+        buffer += "%" + reg + " = fsub double " + v1Name + ", " + v2Name + "\n";
+        reg++;
+    }
+
+    public static void div_double(String v2Name, String v1Name) {
+        buffer += "%" + reg + " = fdiv double " + v2Name + ", " + v1Name + "\n";
+        reg++;
+    }
+    public static void div_i32(String v2Name, String v1Name) {
+      buffer += "%" + reg + " = sdiv i32 " + v2Name + ", " + v1Name + "\n";
+      reg++;
+  }
+  
+  static void declare_string(String id, String value, Boolean isGlobal) {
+    if (isGlobal) {
+        header_text += "@" + id + " = private unnamed_addr constant [" + (value.length() + 1) + " x i8] c\"" + value + "\\00\"\n";
+    } else {
+        buffer += "%" + id + " = alloca i8*, align 8\n";
+        buffer += "store i8* getelementptr inbounds ([" + (value.length() + 1) + " x i8], [" + (value.length() + 1) + " x i8]* @" + id + ", i32 0, i32 0), i8** %" + id + ", align 8\n";
+    }
+  }
+
+  static void printf_string(String id) {
+    buffer += "%"+reg+" = load i8*, i8** "+id+", align 8\n";
+    reg++;
+    buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @str_print_format, i32 0, i32 0), i8* %"+(reg-1)+")\n";
+    reg++;
+  }
+
+
+}
