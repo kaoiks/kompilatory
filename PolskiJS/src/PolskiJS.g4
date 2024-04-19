@@ -7,6 +7,7 @@ block: (stat | function)*
 ;
 
 stat: ID '=' assignment_value ';'           #assign
+    | ID '=' stringvalue ';'                     #assignString
     | PRINT (ID) ';'  		                #write     
     | READ ID ';' 		                    #read   
     | IF compare_equality '{' ifblock '}'   #if
@@ -62,6 +63,9 @@ arithmetic_operation:  value        #singleValue
 value: INT      #int
     | REAL      #real 
 ;	
+
+stringvalue: STRING #string
+;
 
 PRINT: 'wyświetl' 
 ;

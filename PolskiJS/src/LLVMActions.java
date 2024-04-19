@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
-enum VarType{ INT, REAL, UNKNOWN }
+enum VarType{ INT, REAL, UNKNOWN, STRING }
 
 class Value{ 
 	public String name;
@@ -73,7 +73,21 @@ public class LLVMActions extends PolskiJSBaseListener {
     public void exitReal(PolskiJSParser.RealContext ctx) { 
       stack.push( new Value(ctx.REAL().getText(), VarType.REAL) );       
     } 
+    @Override
+    public void exitString(PolskiJSParser.StringContext ctx) {
+      String stringValue = ctx.STRING().getText();
+      // Strip the surrounding double quotes and handle escape sequences
+      stringValue = stringValue.substring(1, stringValue.length() - 1).replace("\\\"", "\"").replace("\\n", "\n");
+      stack.push( new Value(stringValue, VarType.STRING) );
+    }
+    
+    @Override
+   public void exitAssignString(PolskiJSParser.AssignStringContext ctx) {
 
+      String ID = ctx.ID().getText();
+      assignVariable(ID);
+   }
+   
     @Override 
     public void exitAdd(PolskiJSParser.AddContext ctx) { 
       Value v1 = stack.pop();
@@ -280,6 +294,9 @@ public class LLVMActions extends PolskiJSBaseListener {
          {
             LLVMGenerator.printf_double( varName );
          }
+         if (type == VarType.STRING) {
+            LLVMGenerator.printf_string(varName);
+         }
       } 
       else 
       {
@@ -381,6 +398,14 @@ public class LLVMActions extends PolskiJSBaseListener {
       {
          LLVMGenerator.declare_double(ID, isGlobal);
          LLVMGenerator.assign_double(isGlobal ? "@" + ID : "%" + ID, v.name);
+      }
+
+      if (v.type == VarType.STRING) {
+         if (isGlobal) {
+            LLVMGenerator.declare_and_assign_global_string(ID, v.name);
+         } else {
+            LLVMGenerator.declare_and_assign_local_string(ID, v.name);
+         }
       }
 
       if(isGlobal)

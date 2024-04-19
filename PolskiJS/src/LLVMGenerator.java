@@ -1,4 +1,6 @@
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 class LLVMGenerator{
@@ -213,11 +215,19 @@ class LLVMGenerator{
   }
 
   static void printf_string(String id) {
-    buffer += "%"+reg+" = load i8*, i8** "+id+", align 8\n";
+    // Assume the correct string length is known or predefined somewhere
+    int stringLength = getStringLength(id.replace("@", "").replace("%", ""));  // You need a method to retrieve the correct length based on the variable name
+
+    // Get a pointer to the first element of the string array
+    buffer += "%" + reg + " = getelementptr inbounds [" + stringLength + " x i8], [" + stringLength + " x i8]* " + id + ", i32 0, i32 0\n";
     reg++;
-    buffer += "%"+reg+" = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @str_print_format, i32 0, i32 0), i8* %"+(reg-1)+")\n";
+    // Now call printf using this pointer
+    buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @str_print_format, i32 0, i32 0), i8* %" + (reg-1) + ")\n";
     reg++;
-  }
+    buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @new_line, i32 0, i32 0))\n";
+      reg++;
+}
+
 
     static void printf_string_literal(String str) {
       byte[] bytes = str.getBytes(StandardCharsets.UTF_8);
@@ -232,4 +242,29 @@ class LLVMGenerator{
       buffer += "%" + reg + " = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([2 x i8], [2 x i8]* @new_line, i32 0, i32 0))\n";
       reg++;
     }
+
+    static void declare_and_assign_global_string(String varName, String value) {
+      String safeValue = value.replace("\n", "\\0A").replace("\"", "\\22");
+      header_text += "@" + varName + " = private unnamed_addr constant [" + (value.length() + 1) + " x i8] c\"" + safeValue + "\\00\"\n";
+      registerStringLength(varName, value.length() + 1);
+    }
+
+    static void declare_and_assign_local_string(String varName, String value) {
+      String safeValue = value.replace("\n", "\\0A").replace("\"", "\\22");
+      buffer += "%" + varName + " = alloca [" + (value.length() + 1) + " x i8], align 1\n";
+      buffer += "store [" + (value.length() + 1) + " x i8] c\"" + safeValue + "\\00\", [" + (value.length() + 1) + " x i8]* %" + varName + ", align 1\n";
+      registerStringLength(varName, value.length() + 1);
+  }
+
+
+  private static Map<String, Integer> stringLengths = new HashMap<>();
+
+  static void registerStringLength(String variableName, int length) {
+      stringLengths.put(variableName, length);
+  }
+
+  static int getStringLength(String variableName) {
+      return stringLengths.getOrDefault(variableName, 0);  // Default to 0 if not found
+  }
+
 }

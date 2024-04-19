@@ -4,6 +4,9 @@ funkcja zrob() {
     wyświetl a;
     c = 1.5;
     wyświetl c;
+
+    g = "TEKST";
+    wyświetl g;
 }
 
 b = 2;
