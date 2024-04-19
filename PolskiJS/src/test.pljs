@@ -5,6 +5,9 @@ funkcja zrob() {
     c = 1.5;
     wyświetl c;
 
+    o = a + 5;
+    wyświetl o;
+
     g = "TEKST2";
     wyświetl g;
 }
@@ -26,7 +29,7 @@ jeżeli d == 123 {
     }
 }
 
-e = 4.5 + 3.55;
+e = 4.5 + 3.50;
 wyświetl e;
 
 
@@ -36,3 +39,10 @@ wyświetl f;
 
 wyświetl "BARDZO ŁADNY TEKST";
 wyświetl "BARDZO ŁADNY TEKST 2";
+
+m = e + 1.0;
+wyświetl m;
+
+
+l = 2 * 5;
+wyświetl l;

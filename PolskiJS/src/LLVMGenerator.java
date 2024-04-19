@@ -81,15 +81,38 @@ class LLVMGenerator{
     }
  
     static void add_i32(String val1, String val2){
-      buffer += "%"+reg+" = add i32 "+val1+", "+val2+"\n";
-      reg++;
+      
+        buffer += "%"+reg+" = add i32 "+val1+", "+val2+"\n";  // Use the formatted values
+        reg++;
     }
- 
+    
+    static void add_var_and_int(String variableName, String number) {
+      if (!variableName.startsWith("@")) variableName = "@" + variableName;
+      buffer += "%" + reg + " = load i32, i32* " + variableName + "\n";
+      int loadReg = reg++; 
+
+      buffer += "%" + reg + " = add i32 %" + loadReg + ", " + number + "\n";
+      reg++;  
+  } 
+
+    static void add_var_and_double(String variableName, String number) {
+      if (!variableName.startsWith("@")) variableName = "@" + variableName;
+      buffer += "%" + reg + " = load double, double* " + variableName + "\n";
+      int loadReg = reg++; 
+
+      buffer += "%" + reg + " = fadd double %" + loadReg + ", " + number + "\n";
+      reg++;    
+    }
+  
     static void add_double(String val1, String val2){
-      buffer += "%"+reg+" = fadd double "+val1+", "+val2+"\n";
-      reg++;
+        // Similar check for double, assuming constants would be in normal double notation (could also be in scientific notation)
+        val1 = val1.matches("-?\\d+(\\.\\d+)?([eE][-+]?\\d+)?") ? val1 : "%" + val1;  // Check if it's a double constant, otherwise prefix
+        val2 = val2.matches("-?\\d+(\\.\\d+)?([eE][-+]?\\d+)?") ? val2 : "%" + val2;
+    
+        buffer += "%"+reg+" = fadd double "+val1+", "+val2+"\n";  // Use the formatted values
+        reg++;
     }
- 
+
     static void mult_i32(String val1, String val2){
       buffer += "%"+reg+" = mul i32 "+val1+", "+val2+"\n";
       reg++;

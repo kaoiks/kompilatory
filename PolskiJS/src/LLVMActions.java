@@ -89,6 +89,43 @@ public class LLVMActions extends PolskiJSBaseListener {
       assignVariable(ID);
    }
    
+
+      @Override
+   public void exitAddVariable(PolskiJSParser.AddVariableContext ctx) {
+      // Assume the value (right-hand side of the addition) is already evaluated and pushed to the stack
+      Value value = stack.pop();
+      
+      // Get the variable name from the left-hand side of the addition
+      String variableName = ctx.ID().getText();
+      
+      // Determine if the variable is global or local and get the appropriate symbol for LLVM
+      String llvmVariableName;
+      if (isGlobal) {
+         llvmVariableName = globalVariables.containsKey(variableName) ? "@" + variableName : variableName;
+      } else {
+         llvmVariableName = localVariables.containsKey(variableName) ? "%" + variableName : variableName;
+      }
+
+     
+      // // Check if the variable and the value have the same type
+       if (globalVariables.get(variableName) != null && globalVariables.get(variableName) == value.type
+           || localVariables.get(variableName) != null && localVariables.get(variableName) == value.type) {
+           // Perform addition based on the type
+           if (value.type == VarType.INT) {
+               LLVMGenerator.add_var_and_int(llvmVariableName, value.name);
+               stack.push(new Value("%" + (LLVMGenerator.reg - 1), VarType.INT));
+           } else if (value.type == VarType.REAL) {
+               LLVMGenerator.add_var_and_double(llvmVariableName, value.name);
+               stack.push(new Value("%" + (LLVMGenerator.reg - 1), VarType.REAL));
+           }
+       } else {
+           // If types do not match, throw a type error
+           error(ctx.getStart().getLine(), "Type error in addition");
+       }
+   }
+
+
+
     @Override 
     public void exitAdd(PolskiJSParser.AddContext ctx) { 
       Value v1 = stack.pop();
