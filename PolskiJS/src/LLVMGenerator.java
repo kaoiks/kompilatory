@@ -13,7 +13,9 @@ class LLVMGenerator{
    static String buffer = "";
 
    static Stack<Integer> brstack = new Stack<Integer>();
- 
+  
+
+   
    static void scanf_i32(String id){
       buffer += "%"+reg+" = call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([3 x i8], [3 x i8]* @int_scan_format, i32 0, i32 0), i32* "+id+")\n";
       reg++;      
@@ -180,6 +182,7 @@ class LLVMGenerator{
       text += "@double_scan_format = constant [4 x i8] c\"%lf\\00\"\n";
       text += "@str_print_format = constant [3 x i8] c\"%s\\00\"\n";
       text += "@new_line = constant [2 x i8] c\"\\0A\\00\"\n";
+
       text += header_text;
       text += "define i32 @main() nounwind{\n";
       text += main_text;
@@ -200,19 +203,21 @@ class LLVMGenerator{
         buffer += "%" + reg + " = fdiv double " + v2Name + ", " + v1Name + "\n";
         reg++;
     }
-    public static void div_i32(String v2Name, String v1Name) {
-      buffer += "%" + reg + " = sdiv i32 " + v2Name + ", " + v1Name + "\n";
-      reg++;
-  }
-  
-  static void declare_string(String id, String value, Boolean isGlobal) {
-    if (isGlobal) {
-        header_text += "@" + id + " = private unnamed_addr constant [" + (value.length() + 1) + " x i8] c\"" + value + "\\00\"\n";
-    } else {
-        buffer += "%" + id + " = alloca i8*, align 8\n";
-        buffer += "store i8* getelementptr inbounds ([" + (value.length() + 1) + " x i8], [" + (value.length() + 1) + " x i8]* @" + id + ", i32 0, i32 0), i8** %" + id + ", align 8\n";
+      public static void div_i32(String v2Name, String v1Name) {
+        buffer += "%" + reg + " = sdiv i32 " + v2Name + ", " + v1Name + "\n";
+        reg++;
     }
-  }
+    
+    static void declare_string(String id, String value, Boolean isGlobal) {
+      int stringLength = Math.min(value.length(), 256); // Limit the string length to 256 characters
+
+      if (isGlobal) {
+          header_text += "@" + id + " = private unnamed_addr constant [" + (stringLength + 1) + " x i8] c\"" + value.substring(0, stringLength) + "\\00\"\n";
+      } else {
+          buffer += "%" + id + " = alloca i8*, align 8\n";
+          buffer += "store i8* getelementptr inbounds ([" + (stringLength + 1) + " x i8], [" + (stringLength + 1) + " x i8]* @" + id + ", i32 0, i32 0), i8** %" + id + ", align 8\n";
+      }
+    }
 
   static void printf_string(String id) {
     // Assume the correct string length is known or predefined somewhere
@@ -266,5 +271,7 @@ class LLVMGenerator{
   static int getStringLength(String variableName) {
       return stringLengths.getOrDefault(variableName, 0);  // Default to 0 if not found
   }
+
+  
 
 }

@@ -5,7 +5,7 @@ funkcja zrob() {
     c = 1.5;
     wyświetl c;
 
-    g = "TEKST";
+    g = "TEKST2";
     wyświetl g;
 }
 
@@ -17,6 +17,7 @@ wywołaj zrob();
 
 d = 1;
 
+wyświetl "Podaj wartość d:";
 wczytaj d;
 
 jeżeli d == 123 {

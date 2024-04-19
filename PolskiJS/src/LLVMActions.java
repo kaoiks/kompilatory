@@ -2,6 +2,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Stack;
 
+
 enum VarType{ INT, REAL, UNKNOWN, STRING }
 
 class Value{ 

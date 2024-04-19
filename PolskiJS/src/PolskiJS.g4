@@ -57,7 +57,7 @@ arithmetic_operation:  value        #singleValue
     | value MULT value              #mult
     | value DEDUCT value            #deduct
     | value DIV value               #div
-
+    | ID ADD value                  #addVariable
 ;
 
 value: INT      #int
